@@ -1,5 +1,51 @@
 {:schema "nexus.qr.markets.v1"
- :markets [{:id "JP" :language "ja" :status :hypothesis :segment :ticket-kiosks :evidence []}
+ :markets [{:id "JP" :language "ja" :status :hypothesis :segment :ticket-kiosks
+            ;; Official regulator / provider sources located for contract loop step 2
+            ;; (docs/operating-contract.md). Each URL was fetched on :retrieved and
+            ;; returned :http-status. Located is not reviewed: none of these is a legal
+            ;; opinion, and their applicability to in-person QR ticket sales is unassessed.
+            :evidence [{:covers [:stablecoin-acceptance]
+                        :publisher "e-Gov (Digital Agency)"
+                        :title "資金決済に関する法律 (Payment Services Act), statute text"
+                        :url "https://laws.e-gov.go.jp/api/1/lawdata/421AC0000000059"
+                        :retrieved "2026-09-25" :http-status 200}
+                       {:covers [:stablecoin-acceptance]
+                        :publisher "Financial Services Agency"
+                        :title "暗号資産・電子決済手段関係：金融庁"
+                        :url "https://www.fsa.go.jp/policy/virtual_currency02/index.html"
+                        :retrieved "2026-09-25" :http-status 200}
+                       {:covers [:operating-entity]
+                        :publisher "Financial Services Agency"
+                        :title "電子決済手段等取引業者 登録一覧 (registered electronic payment instrument service providers)"
+                        :url "https://www.fsa.go.jp/menkyo/menkyoj/denshikessaisyudan.pdf"
+                        :retrieved "2026-09-25" :http-status 200}
+                       {:covers [:refunds]
+                        :publisher "Consumer Affairs Agency"
+                        :title "特定商取引法 | 消費者庁"
+                        :url "https://www.caa.go.jp/policies/policy/consumer_transaction/specified_commercial_transactions/"
+                        :retrieved "2026-09-25" :http-status 200}
+                       {:covers [:receipts]
+                        :publisher "National Tax Agency"
+                        :title "特集　インボイス制度"
+                        :url "https://www.nta.go.jp/taxes/shiraberu/zeimokubetsu/shohi/keigenzeiritsu/invoice.htm"
+                        :retrieved "2026-09-25" :http-status 200}
+                       {:covers [:privacy]
+                        :publisher "Personal Information Protection Commission"
+                        :title "Laws and Policies | PPC"
+                        :url "https://www.ppc.go.jp/en/legal/"
+                        :retrieved "2026-09-25" :http-status 200}
+                       {:covers [:stablecoin-acceptance]
+                        :publisher "Circle (USDC issuer)"
+                        :title "USDC | Powering global finance. Issued by Circle."
+                        :url "https://www.circle.com/usdc"
+                        :retrieved "2026-09-25" :http-status 200}
+                       {:covers [:stablecoin-acceptance]
+                        :publisher "Base"
+                        :title "Base - Base Documentation"
+                        :url "https://docs.base.org/get-started/base"
+                        :retrieved "2026-09-25" :http-status 200}]
+            ;; Missing evidence stays a named blocker (operating contract, loop step 6).
+            :blockers [:hardware-integration :legal-review :contracting-entity]}
            {:id "US" :language "en" :status :hypothesis :segment :crypto-native-events :evidence []}
            {:id "EEA" :language "en" :status :hypothesis :requires-country-selection true :evidence []}
            {:id "SG" :language "en" :status :hypothesis :segment :merchant-pilots :evidence []}
