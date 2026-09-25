@@ -161,7 +161,7 @@
 
    ;; -- README: the runbook names files that exist
    ["readme-commands-name-files-that-exist"
-    (let [cmds (map second (re-seq #"`nbb ([^`\s]+)`" readme))]
+    (let [cmds (map second (re-seq #"`(?:nbb|kbb --backend sci) ([^`\s]+)`" readme))]
       (and (seq cmds) (every? #(.existsSync fs %) cmds)))]])
 
 ;; ---------------------------------------------------------------------------
