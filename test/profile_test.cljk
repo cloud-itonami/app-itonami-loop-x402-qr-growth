@@ -116,6 +116,19 @@
          (every? #(= :hypothesis (:status %)) (:markets markets)))]
    ["market-ids-are-unique"
     (= (count (:markets markets)) (count (set (map :id (:markets markets)))))]
+   ["market-evidence-is-sourced"
+    ;; Evidence is a located official source, not a bare claim: an https URL,
+    ;; a named publisher, the date it was fetched, the 2xx it returned, and
+    ;; which operating-contract topic it covers.
+    (let [topics #{:stablecoin-acceptance :operating-entity :refunds
+                   :receipts :privacy :hardware-integration}]
+      (every? (fn [{:keys [url publisher retrieved http-status covers]}]
+                (and (string? url) (str/starts-with? url "https://")
+                     (seq publisher)
+                     (and (string? retrieved) (re-matches #"\d{4}-\d{2}-\d{2}" retrieved))
+                     (and (number? http-status) (<= 200 http-status 299))
+                     (seq covers) (every? topics covers)))
+              (mapcat :evidence (:markets markets))))]
    ["non-country-buckets-require-country-selection"
     ;; EEA / LATAM are research buckets. A bucket carrying a merchant :segment,
     ;; or lacking the flag, is being treated as a jurisdiction it is not.
@@ -161,7 +174,7 @@
 
    ;; -- README: the runbook names files that exist
    ["readme-commands-name-files-that-exist"
-    (let [cmds (map second (re-seq #"`nbb ([^`\s]+)`" readme))]
+    (let [cmds (map second (re-seq #"`(?:nbb|kbb --backend sci) ([^`\s]+)`" readme))]
       (and (seq cmds) (every? #(.existsSync fs %) cmds)))]])
 
 ;; ---------------------------------------------------------------------------
